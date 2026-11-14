@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>أصدقاء عمر.. نسمع ونشجع</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Tahoma,Arial,sans-serif;background:#fff7fb;color:#382b35;line-height:1.7}
+main{max-width:720px;margin:24px auto;padding:18px}
+header,.card{background:white;border:1px solid #f1d6e4;border-radius:22px;padding:22px;box-shadow:0 5px 20px #6d34500d}
+header{text-align:center;background:linear-gradient(135deg,#ffe8f2,#f2eaff)}
+h1{color:#a33c70;margin:5px 0} .sub{color:#725c6b}
+.card{margin-top:16px}.tag{display:inline-block;background:#fbe1ed;color:#963963;border-radius:20px;padding:4px 12px;font-size:14px}
+.question{font-size:22px;font-weight:bold;margin:16px 0}
+.actions{display:flex;gap:12px}.actions button,.next,.restart{border:0;border-radius:14px;padding:13px 20px;font-size:18px;font-weight:bold;cursor:pointer;flex:1}
+.true{background:#dff4e6;color:#17683b}.false{background:#ffe2e2;color:#9d3030}
+button:focus{outline:3px solid #b875a0;outline-offset:2px}
+.feedback{min-height:55px;margin-top:14px;padding:12px;border-radius:12px;background:#f7f1f5;font-weight:bold}
+.next,.restart{background:#a94377;color:white;width:100%;margin-top:12px}
+.progress{height:9px;background:#eee;border-radius:20px;overflow:hidden;margin-top:15px}.bar{height:100%;width:0;background:#bd6592;transition:width .2s}
+.center{text-align:center}.hidden{display:none}.score{font-size:30px;color:#a33c70;font-weight:bold}
+small{color:#806f7b}
+</style>
+</head>
+<body>
+<main>
+<header>
+<div style="font-size:42px">🌷📚🌷</div>
+<h1>أصدقاء عمر.. نسمع ونشجع</h1>
+<div class="sub">لعبة صح أم غلط – اختار الإجابة بالضغط على الشاشة</div>
+<div class="progress"><div class="bar" id="bar"></div></div>
+<small id="count">السؤال 1 من 4</small>
+</header>
+<section class="card" id="game">
+<span class="tag" id="tag">اللعبة 1</span>
+<div class="question" id="question">عندما يتحدث عمر، نستمع إليه وننتظره حتى ينتهي من كلامه.</div>
+<div class="actions">
+<button class="true" onclick="answer(true)">صح ✓</button>
+<button class="false" onclick="answer(false)">غلط ✗</button>
+</div>
+<div class="feedback" id="feedback" aria-live="polite">اختار صح أو غلط 😊</div>
+<button class="next hidden" id="next" onclick="advance()">السؤال التالي ←</button>
+</section>
+<section class="card center hidden" id="result">
+<div style="font-size:48px">🏆</div><h2>أحسنت يا بطل!</h2>
+<div class="score" id="score"></div>
+<p>تعلمنا أن نسمع أصدقاءنا، ونشجعهم، ولا نسخر منهم.</p>
+<button class="restart" onclick="restart()">العب مرة أخرى</button>
+</section>
+</main>
+<script>
+const items=[
+["عندما يتحدث عمر، نستمع إليه وننتظره حتى ينتهي من كلامه.",true,"أحسنت! الاستماع بهدوء يساعد عمر ويشعره بالراحة."],
+["نضحك على عمر عندما يتأتئ في الكلام.",false,"ممتاز! لا نسخر من أصدقائنا، فالسخرية تؤذي المشاعر."],
+["نشجع عمر ونقول له: خذ وقتك، نحن نسمعك.",true,"رائع! كلمات التشجيع تجعل صديقنا يشعر بالدعم."],
+["نمنع عمر من اللعب معنا بسبب طريقة كلامه.",false,"إجابة صحيحة! من حق كل طفل أن يشارك أصدقاءه اللعب."]
+];
+let index=0,score=0,locked=false;
+function render(){document.getElementById('tag').textContent='اللعبة '+(index+1);document.getElementById('question').textContent=items[index][0];document.getElementById('feedback').textContent='اختار صح أو غلط 😊';document.getElementById('next').classList.add('hidden');document.querySelectorAll('.actions button').forEach(b=>b.disabled=false);locked=false;document.getElementById('count').textContent='السؤال '+(index+1)+' من '+items.length;document.getElementById('bar').style.width=(index/items.length*100)+'%';}
+function answer(choice){if(locked)return;locked=true;let ok=choice===items[index][1];if(ok)score++;document.getElementById('feedback').textContent=(ok?'✓ إجابة صحيحة! ':'حاول مرة أخرى! ')+items[index][2];document.getElementById('feedback').style.background=ok?'#e4f5e9':'#fff0e8';document.querySelectorAll('.actions button').forEach(b=>b.disabled=true);document.getElementById('next').classList.remove('hidden');}
+function advance(){if(index<items.length-1){index++;render()}else{document.getElementById('game').classList.add('hidden');document.getElementById('result').classList.remove('hidden');document.getElementById('score').textContent=score+' من '+items.length;document.getElementById('bar').style.width='100%';document.getElementById('count').textContent='انتهت اللعبة';}}
+function restart(){index=0;score=0;document.getElementById('result').classList.add('hidden');document.getElementById('game').classList.remove('hidden');render()}
+render();
+</script>
+</body></html>
